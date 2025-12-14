@@ -4,14 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APIGoldBusiness.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
             this.Database.SetCommandTimeout(36000);
         }
-
         public virtual DbSet<CajaRegistradora> CajaRegistradora { get; set; }
         public virtual DbSet<CajaRegistradoraDetalle> CajaRegistradoraDetalle { get; set; }
         public virtual DbSet<Cliente> Cliente { get; set; }
@@ -1202,6 +1201,15 @@ namespace APIGoldBusiness.Data
                 entity.Property(e => e.ModificadoPor)
                     .IsRequired()
                     .HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<ApplicationUser>(entity =>
+            {
+                entity.Property(e => e.FirstName)
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(100);
             });
 
             base.OnModelCreating(modelBuilder);

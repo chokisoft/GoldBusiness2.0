@@ -1,85 +1,141 @@
 ﻿using APIGoldBusiness.Data;
+using GoldBusiness.Shared;
+using GoldBusinessOne.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 Configuración de la cadena de conexión
+// Connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// 🔹 Configuración de EF Core con SQL Server
+// EF Core
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 🔹 Configuración de Swagger/OpenAPI
+// Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+// JWT
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtKey = jwtSection["Key"] ?? throw new InvalidOperationException("Jwt:Key missing. Configure it in appsettings or user-secrets.");
+var key = Encoding.UTF8.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = true;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtSection["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSection["Audience"],
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateLifetime = true
+    };
+});
+
+// Authorization policies (claim based)
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CanManageUsers", p => p.RequireClaim("permission", "can_manage_users"));
+});
+
+// Swagger with JWT support
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v2", new OpenApiInfo
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "API Gold Business", Version = "v2.00" });
+
+    var securityScheme = new OpenApiSecurityScheme
     {
-        Title = "API Gold Business",
-        Version = "v2.00",
-        Description = "API para la gestión de Gold Business",
-        Contact = new OpenApiContact
-        {
-            Name = "Equipo de Desarrollo",
-            Email = "chokisoft@gmail.com",
-            Url = new Uri("https://midominio.com")
-        },
-        License = new OpenApiLicense
-        {
-            Name = "Chokisoft Development Software",
-            Url = new Uri("https://opensource.org/licenses/MIT")
-        }
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer {token}'"
+    };
+    c.AddSecurityDefinition("Bearer", securityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { securityScheme, Array.Empty<string>() }
     });
 });
 
-// 🔹 Controladores
-builder.Services.AddControllers();
-
-// 🔹 Configuración de CORS: permitir cualquier origen, método y encabezado
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
-        policy => policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+        policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-// 🔹 Configuración de Kestrel para escuchar en el puerto 7289 con HTTPS
+// Controllers
+builder.Services.AddControllers();
+
+// Kestrel (keep your existing port)
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(7289, listenOptions =>
     {
-        listenOptions.UseHttps(); // mantiene HTTPS
+        listenOptions.UseHttps();
     });
 });
 
-// 🔹 Endpoints API Explorer (necesario para Swagger)
-builder.Services.AddEndpointsApiExplorer();
-
 var app = builder.Build();
 
-// 🔹 Configuración del pipeline HTTP
+// Seed roles and admin
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        await IdentitySeeder.SeedAsync(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error seeding identity data");
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        // Apuntar a la versión correcta de Swagger
         c.SwaggerEndpoint("/swagger/v2/swagger.json", "API Gold Business - Versión 2.00");
     });
 }
 
-// 🔹 Activar CORS antes de Authorization
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-// 🔹 Mapear controladores
 app.MapControllers();
 
-// 🔹 Ejecutar la aplicación
 app.Run();

@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 
 namespace GoldBusiness.Shared
 {
     public class ApplicationUser : IdentityUser
     {
-        public string Nombres { get; set; } = string.Empty;
-        public string Apellidos { get; set; } = string.Empty;
-        public int UsernameChangeLimit { get; set; } = 3;
-        public byte[] ProfilePicture { get; set; } = Array.Empty<byte>();
-        [Required]
-        public string Accesos { get; set; } = string.Empty;
-        public bool ChangePassword { get; set; }
+        // Solo las propiedades más esenciales para empezar
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public bool IsActive { get; set; } = true;
+
+        // Las demás propiedades las agregaremos después
+        // public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        // public DateTime? LastLoginAt { get; set; }
+        // ... etc
     }
 }

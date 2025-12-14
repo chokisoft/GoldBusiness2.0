@@ -1,7 +1,213 @@
 ﻿@page "/"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<PageTitle>Home</PageTitle>
+<PageTitle>GoldBusiness ERP - Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="dashboard">
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon primary">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="card-title">VENTAS HOY</div>
+                </div>
+                <div class="card-value">$45,230</div>
+                <div class="card-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    <span>12.5% vs ayer</span>
+                </div>
+            </div>
+        </div>
 
-Welcome to your new app.
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon success">
+                        <i class="bi bi-cart-check"></i>
+                    </div>
+                    <div class="card-title">PEDIDOS</div>
+                </div>
+                <div class="card-value">1,254</div>
+                <div class="card-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    <span>8.2% vs mes pasado</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon warning">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="card-title">INVENTARIO</div>
+                </div>
+                <div class="card-value">4,873</div>
+                <div class="card-change negative">
+                    <i class="bi bi-arrow-down"></i>
+                    <span>3.1% bajo stock</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon danger">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="card-title">CLIENTES NUEVOS</div>
+                </div>
+                <div class="card-value">48</div>
+                <div class="card-change positive">
+                    <i class="bi bi-arrow-up"></i>
+                    <span>15.7% este mes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Últimos Pedidos</h3>
+                    <button class="btn btn-sm btn-outline-primary">Ver todos</button>
+                </div>
+                <table class="erp-table">
+                    <thead>
+                        <tr>
+                            <th># Pedido</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD-001</td>
+                            <td>Empresa ABC</td>
+                            <td>15 Nov, 2024</td>
+                            <td>$1,250.00</td>
+                            <td><span class="badge badge-success">Completado</span></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-002</td>
+                            <td>Corporación XYZ</td>
+                            <td>14 Nov, 2024</td>
+                            <td>$3,450.00</td>
+                            <td><span class="badge badge-primary">Procesando</span></td>
+                        </tr>
+                        <tr>
+                            <td>#ORD-003</td>
+                            <td>Tienda Online</td>
+                            <td>13 Nov, 2024</td>
+                            <td>$890.00</td>
+                            <td><span class="badge badge-warning">Pendiente</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-title">Actividad Reciente</div>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                        <div>
+                            <div class="activity-text">Pedido #ORD-001 completado</div>
+                            <div class="activity-time">Hace 2 horas</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="bi bi-person-plus-fill text-primary"></i>
+                        <div>
+                            <div class="activity-text">Nuevo cliente registrado</div>
+                            <div class="activity-time">Hace 4 horas</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                        <div>
+                            <div class="activity-text">Stock bajo en producto X</div>
+                            <div class="activity-time">Hace 6 horas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard {
+        animation: fadeIn 0.5s ease;
+    }
+
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: var(--border-radius);
+        background: var(--gray-100);
+        transition: var(--transition-fast);
+    }
+
+        .activity-item:hover {
+            background: var(--gray-200);
+            transform: translateX(4px);
+        }
+
+        .activity-item i {
+            font-size: 1.25rem;
+            margin-top: 0.125rem;
+        }
+
+    .activity-text {
+        font-weight: 500;
+        color: var(--gray-800);
+        font-size: 0.875rem;
+    }
+
+    .activity-time {
+        font-size: 0.75rem;
+        color: var(--gray-600);
+        margin-top: 0.125rem;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+}

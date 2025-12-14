@@ -1,0 +1,16 @@
+﻿@inject NavigationManager Navigation
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Obtener la URL actual relativa
+        var returnUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+
+        // Si está vacía o es la raíz, usar "/"
+        if (string.IsNullOrEmpty(returnUrl) || returnUrl == "/")
+            returnUrl = "/";
+
+        // Redirigir al login con la URL de retorno
+        Navigation.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", true);
+    }
+}

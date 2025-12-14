@@ -1,39 +1,388 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">GoldBusinessOne</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager Navigation
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
+<nav class="nav-menu">
+    <div class="menu-section">
+        <div class="menu-title">PANEL PRINCIPAL</div>
+        <NavLink class="menu-item" href="" Match="NavLinkMatch.All" title="Dashboard">
+            <i class="menu-icon bi bi-speedometer2"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Dashboard</span>
+                <span class="menu-badge badge-success">Nuevo</span>
+            }
+        </NavLink>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-title">INVENTARIOS</div>
+        <NavLink class="menu-item" href="inventarios" title="Inventarios">
+            <i class="menu-icon bi bi-box-seam"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Inventarios</span>
+            }
+        </NavLink>
+
+        <div class="menu-subsection" data-title="Nomencladores">
+            <div class="menu-item menu-toggle @(showNomencladores ? "active" : "")"
+                 @onclick="ToggleNomencladores">
+                <i class="menu-icon bi bi-folder2-open"></i>
+                @if (!IsCollapsed)
+                {
+                    <span class="menu-text">Nomencladores</span>
+                    <i class="menu-arrow bi @(showNomencladores ? "bi-chevron-up" : "bi-chevron-down")"></i>
+                }
+            </div>
+
+            @if (showNomencladores && !IsCollapsed)
+            {
+                <div class="submenu">
+                    <NavLink class="submenu-item" href="grupo-cuenta">
+                        <i class="submenu-icon bi bi-circle"></i>
+                        <span class="submenu-text">Grupo Cuenta</span>
+                    </NavLink>
+                    <NavLink class="submenu-item" href="subgrupo-cuenta">
+                        <i class="submenu-icon bi bi-circle"></i>
+                        <span class="submenu-text">SubGrupo Cuenta</span>
+                    </NavLink>
+                    <NavLink class="submenu-item" href="cuenta">
+                        <i class="submenu-icon bi bi-circle"></i>
+                        <span class="submenu-text">Cuenta</span>
+                    </NavLink>
+                </div>
+            }
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+
+        <NavLink class="menu-item" href="productos" title="Productos">
+            <i class="menu-icon bi bi-tags"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Productos</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="categorias" title="Categorías">
+            <i class="menu-icon bi bi-diagram-3"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Categorías</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="proveedores" title="Proveedores">
+            <i class="menu-icon bi bi-truck"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Proveedores</span>
+            }
+        </NavLink>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-title">FINANZAS</div>
+        <NavLink class="menu-item" href="contabilidad" title="Contabilidad">
+            <i class="menu-icon bi bi-calculator"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Contabilidad</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="facturacion" title="Facturación">
+            <i class="menu-icon bi bi-receipt"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Facturación</span>
+                <span class="menu-badge badge-warning">2</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="reportes-financieros" title="Reportes">
+            <i class="menu-icon bi bi-graph-up"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Reportes Financieros</span>
+            }
+        </NavLink>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-title">VENTAS</div>
+        <NavLink class="menu-item" href="clientes" title="Clientes">
+            <i class="menu-icon bi bi-people"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Clientes</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="pedidos" title="Pedidos">
+            <i class="menu-icon bi bi-cart"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Pedidos</span>
+                <span class="menu-badge badge-danger">5</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="cotizaciones" title="Cotizaciones">
+            <i class="menu-icon bi bi-file-text"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Cotizaciones</span>
+            }
+        </NavLink>
+    </div>
+
+    <div class="menu-section">
+        <div class="menu-title">CONFIGURACIÓN</div>
+        <NavLink class="menu-item" href="configuracion" title="Configuración">
+            <i class="menu-icon bi bi-gear"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Configuración</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="usuarios" title="Usuarios">
+            <i class="menu-icon bi bi-person-badge"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Usuarios</span>
+            }
+        </NavLink>
+
+        <NavLink class="menu-item" href="backup" title="Backup">
+            <i class="menu-icon bi bi-database"></i>
+            @if (!IsCollapsed)
+            {
+                <span class="menu-text">Backup</span>
+            }
+        </NavLink>
+    </div>
+</nav>
+
+<style>
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .menu-section {
+        margin-bottom: 1rem;
+    }
+
+    .menu-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+        display: none;
+    }
+
+    .sidebar:not(.collapsed) .menu-title {
+        display: block;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: var(--gray-700);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        transition: var(--transition-fast);
+        cursor: pointer;
+        position: relative;
+        border-left: 3px solid transparent;
+    }
+
+        .menu-item:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+            border-left-color: var(--accent);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(26, 35, 126, 0.1) 0%, rgba(26, 35, 126, 0.05) 100%);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+    .menu-icon {
+        font-size: 1.125rem;
+        width: 24px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .menu-text {
+        flex: 1;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-left: 0.75rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-badge {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.375rem;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    .menu-arrow {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+        transition: transform 0.3s ease;
+    }
+
+    .menu-toggle.active .menu-arrow {
+        transform: rotate(180deg);
+        color: var(--primary);
+    }
+
+    .menu-subsection {
+        position: relative;
+    }
+
+    .submenu {
+        margin-left: 1.5rem;
+        border-left: 2px solid var(--gray-200);
+        padding-left: 0.5rem;
+        margin-top: 0.25rem;
+    }
+
+    .submenu-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        color: var(--gray-600);
+        text-decoration: none;
+        border-radius: var(--border-radius-sm);
+        transition: var(--transition-fast);
+        font-size: 0.8125rem;
+    }
+
+        .submenu-item:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .submenu-item.active {
+            background: rgba(26, 35, 126, 0.08);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+    .submenu-icon {
+        font-size: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .submenu-text {
+        flex: 1;
+    }
+
+    /* Sidebar collapsed styles */
+    .sidebar.collapsed .menu-title,
+    .sidebar.collapsed .menu-text,
+    .sidebar.collapsed .menu-badge,
+    .sidebar.collapsed .menu-arrow,
+    .sidebar.collapsed .submenu {
+        display: none;
+    }
+
+    .sidebar.collapsed .menu-item {
+        justify-content: center;
+        padding: 0.75rem;
+        border-left: none;
+        border-right: 3px solid transparent;
+    }
+
+        .sidebar.collapsed .menu-item:hover {
+            border-right-color: var(--accent);
+        }
+
+        .sidebar.collapsed .menu-item.active {
+            border-right-color: var(--primary);
+        }
+
+    .sidebar.collapsed .menu-icon {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    /* Tooltips for collapsed sidebar */
+    .sidebar.collapsed .menu-item:hover::after {
+        content: attr(title);
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--border-radius);
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        margin-left: 10px;
+        z-index: 1200;
+        box-shadow: var(--shadow-lg);
+        pointer-events: none;
+    }
+
+    .sidebar.collapsed .menu-subsection:hover::after {
+        content: "Nomencladores";
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--border-radius);
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        margin-left: 10px;
+        z-index: 1200;
+        box-shadow: var(--shadow-lg);
+        pointer-events: none;
+    }
+</style>
 
 @code {
-    private bool collapseNavMenu = true;
+    [Parameter] public bool IsCollapsed { get; set; }
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private bool showNomencladores = true;
 
-    private void ToggleNavMenu()
+    protected override void OnInitialized()
     {
-        collapseNavMenu = !collapseNavMenu;
+        // Verificar si estamos en una página de nomencladores
+        var currentPath = Navigation.ToBaseRelativePath(Navigation.Uri);
+        if (currentPath.Contains("grupo-cuenta") ||
+            currentPath.Contains("subgrupo-cuenta") ||
+            currentPath.Contains("cuenta"))
+        {
+            showNomencladores = true;
+        }
+    }
+
+    private void ToggleNomencladores()
+    {
+        if (!IsCollapsed)
+        {
+            showNomencladores = !showNomencladores;
+        }
     }
 }
