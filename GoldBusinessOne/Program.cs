@@ -1,4 +1,5 @@
 using GoldBusinessOne.Services;
+using GoldBusinessOne.Services.GrupoCuentaServices;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -29,6 +30,8 @@ namespace GoldBusinessOne
 
             // Default HttpClient (usa el mismo configurado arriba)
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Api"));
+
+            builder.Services.AddScoped<IGrupoCuentaService, GrupoCuentaService>();
 
             // Auth services
             builder.Services.AddAuthorizationCore(options =>

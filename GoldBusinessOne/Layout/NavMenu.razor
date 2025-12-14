@@ -6,11 +6,8 @@
         <div class="menu-title">PANEL PRINCIPAL</div>
         <NavLink class="menu-item" href="" Match="NavLinkMatch.All" title="Dashboard">
             <i class="menu-icon bi bi-speedometer2"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Dashboard</span>
-                <span class="menu-badge badge-success">Nuevo</span>
-            }
+            <span class="menu-text">Dashboard</span>
+            <span class="menu-badge badge-success">Nuevo</span>
         </NavLink>
     </div>
 
@@ -18,35 +15,29 @@
         <div class="menu-title">INVENTARIOS</div>
         <NavLink class="menu-item" href="inventarios" title="Inventarios">
             <i class="menu-icon bi bi-box-seam"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Inventarios</span>
-            }
+            <span class="menu-text">Inventarios</span>
         </NavLink>
 
         <div class="menu-subsection" data-title="Nomencladores">
             <div class="menu-item menu-toggle @(showNomencladores ? "active" : "")"
                  @onclick="ToggleNomencladores">
                 <i class="menu-icon bi bi-folder2-open"></i>
-                @if (!IsCollapsed)
-                {
-                    <span class="menu-text">Nomencladores</span>
-                    <i class="menu-arrow bi @(showNomencladores ? "bi-chevron-up" : "bi-chevron-down")"></i>
-                }
+                <span class="menu-text">Nomencladores</span>
+                <i class="menu-arrow bi @(showNomencladores ? "bi-chevron-up" : "bi-chevron-down")"></i>
             </div>
 
-            @if (showNomencladores && !IsCollapsed)
+            @if (showNomencladores)
             {
                 <div class="submenu">
-                    <NavLink class="submenu-item" href="grupo-cuenta">
+                    <NavLink class="submenu-item" href="grupo-cuentas">
                         <i class="submenu-icon bi bi-circle"></i>
                         <span class="submenu-text">Grupo Cuenta</span>
                     </NavLink>
-                    <NavLink class="submenu-item" href="subgrupo-cuenta">
+                    <NavLink class="submenu-item" href="subgrupo-cuentas">
                         <i class="submenu-icon bi bi-circle"></i>
                         <span class="submenu-text">SubGrupo Cuenta</span>
                     </NavLink>
-                    <NavLink class="submenu-item" href="cuenta">
+                    <NavLink class="submenu-item" href="cuentas">
                         <i class="submenu-icon bi bi-circle"></i>
                         <span class="submenu-text">Cuenta</span>
                     </NavLink>
@@ -56,26 +47,17 @@
 
         <NavLink class="menu-item" href="productos" title="Productos">
             <i class="menu-icon bi bi-tags"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Productos</span>
-            }
+            <span class="menu-text">Productos</span>
         </NavLink>
 
         <NavLink class="menu-item" href="categorias" title="Categorías">
             <i class="menu-icon bi bi-diagram-3"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Categorías</span>
-            }
+            <span class="menu-text">Categorías</span>
         </NavLink>
 
         <NavLink class="menu-item" href="proveedores" title="Proveedores">
             <i class="menu-icon bi bi-truck"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Proveedores</span>
-            }
+            <span class="menu-text">Proveedores</span>
         </NavLink>
     </div>
 
@@ -83,27 +65,18 @@
         <div class="menu-title">FINANZAS</div>
         <NavLink class="menu-item" href="contabilidad" title="Contabilidad">
             <i class="menu-icon bi bi-calculator"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Contabilidad</span>
-            }
+            <span class="menu-text">Contabilidad</span>
         </NavLink>
 
         <NavLink class="menu-item" href="facturacion" title="Facturación">
             <i class="menu-icon bi bi-receipt"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Facturación</span>
-                <span class="menu-badge badge-warning">2</span>
-            }
+            <span class="menu-text">Facturación</span>
+            <span class="menu-badge badge-warning">2</span>
         </NavLink>
 
         <NavLink class="menu-item" href="reportes-financieros" title="Reportes">
             <i class="menu-icon bi bi-graph-up"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Reportes Financieros</span>
-            }
+            <span class="menu-text">Reportes Financieros</span>
         </NavLink>
     </div>
 
@@ -111,27 +84,18 @@
         <div class="menu-title">VENTAS</div>
         <NavLink class="menu-item" href="clientes" title="Clientes">
             <i class="menu-icon bi bi-people"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Clientes</span>
-            }
+            <span class="menu-text">Clientes</span>
         </NavLink>
 
         <NavLink class="menu-item" href="pedidos" title="Pedidos">
             <i class="menu-icon bi bi-cart"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Pedidos</span>
-                <span class="menu-badge badge-danger">5</span>
-            }
+            <span class="menu-text">Pedidos</span>
+            <span class="menu-badge badge-danger">5</span>
         </NavLink>
 
         <NavLink class="menu-item" href="cotizaciones" title="Cotizaciones">
             <i class="menu-icon bi bi-file-text"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Cotizaciones</span>
-            }
+            <span class="menu-text">Cotizaciones</span>
         </NavLink>
     </div>
 
@@ -139,35 +103,28 @@
         <div class="menu-title">CONFIGURACIÓN</div>
         <NavLink class="menu-item" href="configuracion" title="Configuración">
             <i class="menu-icon bi bi-gear"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Configuración</span>
-            }
+            <span class="menu-text">Configuración</span>
         </NavLink>
 
         <NavLink class="menu-item" href="usuarios" title="Usuarios">
             <i class="menu-icon bi bi-person-badge"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Usuarios</span>
-            }
+            <span class="menu-text">Usuarios</span>
         </NavLink>
 
         <NavLink class="menu-item" href="backup" title="Backup">
             <i class="menu-icon bi bi-database"></i>
-            @if (!IsCollapsed)
-            {
-                <span class="menu-text">Backup</span>
-            }
+            <span class="menu-text">Backup</span>
         </NavLink>
     </div>
 </nav>
 
 <style>
+    /* Estilos del NavMenu */
     .nav-menu {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        padding: 0.5rem;
     }
 
     .menu-section {
@@ -182,11 +139,6 @@
         letter-spacing: 0.5px;
         padding: 0.5rem 1rem;
         margin-bottom: 0.5rem;
-        display: none;
-    }
-
-    .sidebar:not(.collapsed) .menu-title {
-        display: block;
     }
 
     .menu-item {
@@ -200,6 +152,7 @@
         cursor: pointer;
         position: relative;
         border-left: 3px solid transparent;
+        gap: 0.75rem;
     }
 
         .menu-item:hover {
@@ -220,13 +173,15 @@
         width: 24px;
         text-align: center;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .menu-text {
         flex: 1;
         font-size: 0.875rem;
         font-weight: 500;
-        margin-left: 0.75rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -237,6 +192,8 @@
         padding: 0.125rem 0.375rem;
         border-radius: 10px;
         font-weight: 700;
+        background: var(--success);
+        color: white;
     }
 
     .menu-arrow {
@@ -270,6 +227,7 @@
         border-radius: var(--border-radius-sm);
         transition: var(--transition-fast);
         font-size: 0.8125rem;
+        gap: 0.5rem;
     }
 
         .submenu-item:hover {
@@ -285,79 +243,13 @@
 
     .submenu-icon {
         font-size: 0.5rem;
-        margin-right: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .submenu-text {
         flex: 1;
-    }
-
-    /* Sidebar collapsed styles */
-    .sidebar.collapsed .menu-title,
-    .sidebar.collapsed .menu-text,
-    .sidebar.collapsed .menu-badge,
-    .sidebar.collapsed .menu-arrow,
-    .sidebar.collapsed .submenu {
-        display: none;
-    }
-
-    .sidebar.collapsed .menu-item {
-        justify-content: center;
-        padding: 0.75rem;
-        border-left: none;
-        border-right: 3px solid transparent;
-    }
-
-        .sidebar.collapsed .menu-item:hover {
-            border-right-color: var(--accent);
-        }
-
-        .sidebar.collapsed .menu-item.active {
-            border-right-color: var(--primary);
-        }
-
-    .sidebar.collapsed .menu-icon {
-        margin: 0;
-        font-size: 1.25rem;
-    }
-
-    /* Tooltips for collapsed sidebar */
-    .sidebar.collapsed .menu-item:hover::after {
-        content: attr(title);
-        position: absolute;
-        left: 100%;
-        top: 50%;
-        transform: translateY(-50%);
-        background: var(--primary);
-        color: white;
-        padding: 0.5rem 0.75rem;
-        border-radius: var(--border-radius);
-        font-size: 0.75rem;
-        font-weight: 500;
-        white-space: nowrap;
-        margin-left: 10px;
-        z-index: 1200;
-        box-shadow: var(--shadow-lg);
-        pointer-events: none;
-    }
-
-    .sidebar.collapsed .menu-subsection:hover::after {
-        content: "Nomencladores";
-        position: absolute;
-        left: 100%;
-        top: 50%;
-        transform: translateY(-50%);
-        background: var(--primary);
-        color: white;
-        padding: 0.5rem 0.75rem;
-        border-radius: var(--border-radius);
-        font-size: 0.75rem;
-        font-weight: 500;
-        white-space: nowrap;
-        margin-left: 10px;
-        z-index: 1200;
-        box-shadow: var(--shadow-lg);
-        pointer-events: none;
     }
 </style>
 
@@ -370,9 +262,9 @@
     {
         // Verificar si estamos en una página de nomencladores
         var currentPath = Navigation.ToBaseRelativePath(Navigation.Uri);
-        if (currentPath.Contains("grupo-cuenta") ||
-            currentPath.Contains("subgrupo-cuenta") ||
-            currentPath.Contains("cuenta"))
+        if (currentPath.Contains("grupo-cuentas") ||
+            currentPath.Contains("subgrupo-cuentas") ||
+            currentPath.Contains("cuentas"))
         {
             showNomencladores = true;
         }
@@ -380,9 +272,6 @@
 
     private void ToggleNomencladores()
     {
-        if (!IsCollapsed)
-        {
-            showNomencladores = !showNomencladores;
-        }
+        showNomencladores = !showNomencladores;
     }
 }

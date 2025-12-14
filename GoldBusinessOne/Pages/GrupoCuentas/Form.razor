@@ -1,0 +1,132 @@
+﻿@page "/grupo-cuentas/nuevo"
+@page "/grupo-cuentas/editar/{Id:int}"
+@using GoldBusiness.Shared
+@using GoldBusinessOne.Services
+@using GoldBusinessOne.Services.GrupoCuentaServices
+@inject IGrupoCuentaService GrupoCuentaService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>@TituloPagina</PageTitle>
+
+<h3>@TituloPagina</h3>
+
+<EditForm Model="@grupoCuenta" OnValidSubmit="@GuardarGrupo">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="codigo" class="form-label">Código *</label>
+                <InputText id="codigo" @bind-Value="grupoCuenta.Codigo"
+                           class="form-control" placeholder="Ej: 01" />
+                <ValidationMessage For="@(() => grupoCuenta.Codigo)" />
+                <small class="form-text text-muted">Debe ser exactamente 2 dígitos numéricos</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción *</label>
+                <InputText id="descripcion" @bind-Value="grupoCuenta.Descripcion"
+                           class="form-control" />
+                <ValidationMessage For="@(() => grupoCuenta.Descripcion)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check form-switch">
+            <InputCheckbox id="cancelado" @bind-Value="grupoCuenta.Cancelado"
+                           class="form-check-input" />
+            <label class="form-check-label" for="cancelado">
+                Cancelado
+            </label>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary" disabled="@isSaving">
+            @if (isSaving)
+            {
+                <span class="spinner-border spinner-border-sm" role="status"></span>
+                <span class="ms-1">Guardando...</span>
+            }
+            else
+            {
+                <span>Guardar</span>
+            }
+        </button>
+        <button type="button" class="btn btn-secondary" @onclick="Cancelar"
+                disabled="@isSaving">
+            Cancelar
+        </button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private GrupoCuenta grupoCuenta = new();
+    private bool isSaving = false;
+    private bool isEditMode => Id > 0;
+    private string TituloPagina => isEditMode ? "Editar Grupo de Cuenta" : "Nuevo Grupo de Cuenta";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (isEditMode)
+        {
+            await CargarGrupoCuenta();
+        }
+    }
+
+    private async Task CargarGrupoCuenta()
+    {
+        try
+        {
+            grupoCuenta = await GrupoCuentaService.GetByIdAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("alert", $"Error al cargar: {ex.Message}");
+            Navigation.NavigateTo("/grupo-cuentas");
+        }
+    }
+
+    private async Task GuardarGrupo()
+    {
+        isSaving = true;
+        StateHasChanged();
+
+        try
+        {
+            if (isEditMode)
+            {
+                grupoCuenta.ModificadoPor = "UsuarioActual";
+                grupoCuenta.FechaHoraModificado = DateTime.Now;
+                await GrupoCuentaService.UpdateAsync(grupoCuenta);
+            }
+            else
+            {
+                grupoCuenta.CreadoPor = "UsuarioActual";
+                grupoCuenta.FechaHoraCreado = DateTime.Now;
+                grupoCuenta.ModificadoPor = "UsuarioActual";
+                grupoCuenta.FechaHoraModificado = DateTime.Now;
+                await GrupoCuentaService.CreateAsync(grupoCuenta);
+            }
+
+            Navigation.NavigateTo("/grupo-cuentas");
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("alert", $"Error al guardar: {ex.Message}");
+            isSaving = false;
+            StateHasChanged();
+        }
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/grupo-cuentas");
+    }
+}

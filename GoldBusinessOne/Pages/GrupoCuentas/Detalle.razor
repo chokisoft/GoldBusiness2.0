@@ -1,0 +1,90 @@
+﻿@page "/grupo-cuentas/{Id:int}"
+@using GoldBusiness.Shared
+@using GoldBusinessOne.Services
+@using GoldBusinessOne.Services.GrupoCuentaServices
+@inject IGrupoCuentaService GrupoCuentaService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>Detalle de Grupo de Cuenta</PageTitle>
+
+@if (grupoCuenta == null)
+{
+    <div class="alert alert-info">Cargando...</div>
+}
+else
+{
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Detalle del Grupo de Cuenta</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID:</dt>
+                <dd class="col-sm-9">@grupoCuenta.Id</dd>
+
+                <dt class="col-sm-3">Código:</dt>
+                <dd class="col-sm-9">@grupoCuenta.Codigo</dd>
+
+                <dt class="col-sm-3">Descripción:</dt>
+                <dd class="col-sm-9">@grupoCuenta.Descripcion</dd>
+
+                <dt class="col-sm-3">Estado:</dt>
+                <dd class="col-sm-9">
+                    <span class="badge @(!grupoCuenta.Cancelado ? "bg-success" : "bg-danger")">
+                        @(!grupoCuenta.Cancelado ? "Activo" : "Cancelado")
+                    </span>
+                </dd>
+
+                <dt class="col-sm-3">Creado Por:</dt>
+                <dd class="col-sm-9">@grupoCuenta.CreadoPor</dd>
+
+                <dt class="col-sm-3">Fecha Creación:</dt>
+                <dd class="col-sm-9">@grupoCuenta.FechaHoraCreado.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                <dt class="col-sm-3">Modificado Por:</dt>
+                <dd class="col-sm-9">@grupoCuenta.ModificadoPor</dd>
+
+                <dt class="col-sm-3">Fecha Modificación:</dt>
+                <dd class="col-sm-9">@grupoCuenta.FechaHoraModificado.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" @onclick="Volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+            <button class="btn btn-warning" @onclick="Editar">
+                <i class="fas fa-edit"></i> Editar
+            </button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private GrupoCuenta grupoCuenta;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            grupoCuenta = await GrupoCuentaService.GetByIdAsync(Id);
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("alert", $"Error al cargar: {ex.Message}");
+            Navigation.NavigateTo("/grupo-cuentas");
+        }
+    }
+
+    private void Volver()
+    {
+        Navigation.NavigateTo("/grupo-cuentas");
+    }
+
+    private void Editar()
+    {
+        Navigation.NavigateTo($"/grupo-cuentas/editar/{Id}");
+    }
+}

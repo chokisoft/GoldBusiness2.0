@@ -41,7 +41,10 @@
                     </div>
 
                     <div class="sidebar-menu">
-                        <NavMenu IsCollapsed="isCollapsed" />
+                        <!-- Envuelve el NavMenu con la clase para control colapsado -->
+                        <div class="nav-menu-wrapper @(isCollapsed ? "collapsed" : "")">
+                            <NavMenu IsCollapsed="isCollapsed" />
+                        </div>
                     </div>
 
                     <div class="sidebar-footer">

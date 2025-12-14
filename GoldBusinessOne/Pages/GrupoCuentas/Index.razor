@@ -1,0 +1,135 @@
+﻿@page "/grupo-cuentas"
+@using GoldBusiness.Shared
+@using GoldBusinessOne.Services
+@using GoldBusinessOne.Services.GrupoCuentaServices
+@inject IGrupoCuentaService GrupoCuentaService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>Grupos de Cuentas</PageTitle>
+
+<h3>Grupos de Cuentas</h3>
+
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="NuevoGrupo">
+        <i class="bi bi-plus-circle"></i> Nuevo Grupo
+    </button>
+</div>
+
+@if (grupoCuentas == null)
+{
+    <div class="alert alert-info">
+        <i class="bi bi-arrow-clockwise"></i> Cargando grupos de cuentas...
+    </div>
+}
+else if (!grupoCuentas.Any())
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No hay grupos de cuentas registrados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover" style="table-layout: fixed; width: 100%"> 
+            <thead class="table-dark">
+                <tr>
+                    <th style="text-align: left" width="80px">Código</th>
+                    <th style="text-align: left">Descripción</th>
+                    <th style="text-align:center" width="120px">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var grupo in grupoCuentas)
+                {
+                    <tr>
+                        <td style="text-align: left" width="80px">@grupo.Codigo</td>
+                        <td style="text-align: left">@grupo.Descripcion</td>
+                        <td style="text-align: center" width="120px">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <!-- Ver -->
+                                <a class="text-info me-2" href="javascript:void(0)"
+                                   @onclick="() => VerGrupo(grupo.Id)"
+                                   title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
+                                <!-- Editar -->
+                                <a class="text-warning me-2" href="javascript:void(0)"
+                                   @onclick="() => EditarGrupo(grupo.Id)"
+                                   title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <!-- Eliminar -->
+                                <a class="text-danger" href="javascript:void(0)"
+                                   @onclick="() => EliminarGrupo(grupo)"
+                                   title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<GrupoCuenta> grupoCuentas = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarGrupoCuentas();
+    }
+
+    private async Task CargarGrupoCuentas()
+    {
+        try
+        {
+            grupoCuentas = await GrupoCuentaService.GetAllAsync();
+        }
+        catch (Exception ex)
+        {
+            await JS.InvokeVoidAsync("console.error", ex.Message);
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void NuevoGrupo()
+    {
+        Navigation.NavigateTo("/grupo-cuentas/nuevo");
+    }
+
+    private void VerGrupo(int id)
+    {
+        Navigation.NavigateTo($"/grupo-cuentas/{id}");
+    }
+
+    private void EditarGrupo(int id)
+    {
+        Navigation.NavigateTo($"/grupo-cuentas/editar/{id}");
+    }
+
+    private async Task EliminarGrupo(GrupoCuenta grupo)
+    {
+        if (await JS.InvokeAsync<bool>("confirm", $"¿Está seguro de eliminar el grupo {grupo.Descripcion}?"))
+        {
+            try
+            {
+                await GrupoCuentaService.DeleteAsync(grupo.Id);
+                await CargarGrupoCuentas();
+            }
+            catch (Exception ex)
+            {
+                await JS.InvokeVoidAsync("alert", $"Error al eliminar: {ex.Message}");
+            }
+        }
+    }
+}
