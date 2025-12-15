@@ -1,0 +1,20 @@
+﻿/* App.css - Puedes mantener esto o eliminarlo si usas solo MUI */
+
+/* Si tienes estilos específicos de la app, mantenlos aquí */
+#root {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Si tienes problemas de scroll, agrega esto */
+body {
+    overflow-y: auto;
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 360px) {
+    .MuiContainer-root {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}

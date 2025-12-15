@@ -1,0 +1,6 @@
+@GoldBusinessOne.React.Server_HostAddress = http://localhost:5177
+
+GET {{GoldBusinessOne.React.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

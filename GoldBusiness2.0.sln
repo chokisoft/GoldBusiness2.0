@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIGoldBusiness", "APIGoldB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldBusinessOne", "GoldBusinessOne\GoldBusinessOne.csproj", "{4F2509C9-1531-4D36-8178-189112C1ED0B}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "goldbusinessone.react.client", "GoldBusinessOne.React\goldbusinessone.react.client\goldbusinessone.react.client.esproj", "{D4178E1E-2B60-857A-B0C8-F28073F10994}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldBusinessOne.React.Server", "GoldBusinessOne.React\GoldBusinessOne.React.Server\GoldBusinessOne.React.Server.csproj", "{EC5B56F5-EE82-48D8-B583-1DC0949EDB08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,16 @@ Global
 		{4F2509C9-1531-4D36-8178-189112C1ED0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F2509C9-1531-4D36-8178-189112C1ED0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F2509C9-1531-4D36-8178-189112C1ED0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4178E1E-2B60-857A-B0C8-F28073F10994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4178E1E-2B60-857A-B0C8-F28073F10994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4178E1E-2B60-857A-B0C8-F28073F10994}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D4178E1E-2B60-857A-B0C8-F28073F10994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4178E1E-2B60-857A-B0C8-F28073F10994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4178E1E-2B60-857A-B0C8-F28073F10994}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EC5B56F5-EE82-48D8-B583-1DC0949EDB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC5B56F5-EE82-48D8-B583-1DC0949EDB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC5B56F5-EE82-48D8-B583-1DC0949EDB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC5B56F5-EE82-48D8-B583-1DC0949EDB08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
